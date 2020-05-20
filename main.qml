@@ -3,7 +3,7 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.0
 import com.company.logic 1.0
-
+import QtQuick.Dialogs 1.1
 
 
 Window {
@@ -18,6 +18,17 @@ Window {
 
     Mydata{
         id:yarab
+    }
+
+    MessageDialog {
+        id: messageDialog
+        title: "Error"
+        text: "THIS ACTION CAN'T BE DONE !"
+        onAccepted: {
+            console.log("And of course you could only agree.")
+            //Qt.quit()
+        }
+        Component.onCompleted: visible = false
     }
 
     Image {
@@ -166,8 +177,8 @@ Window {
 
         Label {
             id: label13
-            x: 557
-            y: 115
+            x: 610
+            y: 22
             width: 345
             height: 37
             color: "#ffffff"
@@ -179,20 +190,20 @@ Window {
 
         TextField {
             id: deallocate_label
-            x: 576
-            y: 158
+            x: 618
+            y: 65
             width: 108
             height: 40
         }
 
         Label {
             id: label14
-            x: 499
+            x: 520
             y: 440
             width: 206
-            height: 27
+            height: 32
             color: "#ffffff"
-            text: " ID BASE LIMIT"
+            text: " ID   BASE   LIMIT"
             font.family: "Times New Roman"
             font.pointSize: 16
             font.bold: true
@@ -271,7 +282,10 @@ Window {
                     mylist.append({name : logic.get_memoryContents(i)})
                 }
             }
-            else console.log("your process can't be added yala")
+            else {
+                console.log("your process can't be added yala")
+                messageDialog.open();
+            }
 
         }
     }
@@ -299,7 +313,7 @@ Window {
                     mylist.append({name : logic.get_memoryContents(i)})
                 }
             }
-            else console.log("your process can't be added yala")
+            else messageDialog.open();
 
         }
     }
@@ -377,6 +391,7 @@ Window {
 
             TextField {
                 id: segment_name
+                font.capitalization: Font.MixedCase
                 Layout.preferredHeight: 24
                 Layout.preferredWidth: 85
             }
@@ -442,8 +457,8 @@ Window {
 
     Button {
         id: confirm_memory
-        x: 480
-        y: 30
+        x: 413
+        y: 26
         width: 71
         height: 27
         text: qsTr("OK")
@@ -451,6 +466,10 @@ Window {
             memorylist.push(memory_size.text.toString())
             //logic.set_x(memory_size.text)
             logic.set_memorySize(memory_size.text);
+            var memSize = logic.get_memorySize();
+            for(var i =0 ; i< memSize; i++){
+                mylist.append({name : ""})
+            }
         }
     }
 
@@ -581,12 +600,6 @@ Window {
         }
         model: ListModel {
             id: mylist
-            ListElement {
-                limits: "0 -> 100"
-                name : ""
-                size : "100"
-
-            }
 
         }
 
@@ -618,8 +631,8 @@ Window {
 
     Button {
         id: deallocate_but
-        x: 705
-        y: 161
+        x: 749
+        y: 73
         width: 100
         height: 33
         text: qsTr("ok")
@@ -660,10 +673,12 @@ Window {
 
 
 
+
+
 /*##^## Designer {
-    D{i:2;anchors_height:720;anchors_width:1280}D{i:30;anchors_x:0;anchors_y:49}D{i:29;anchors_x:0;anchors_y:49}
-D{i:33;anchors_x:0;anchors_y:106}D{i:32;anchors_x:0;anchors_y:106}D{i:36;anchors_x:0;anchors_y:163}
-D{i:35;anchors_x:0;anchors_y:163}D{i:39;anchors_x:0;anchors_y:219}D{i:38;anchors_x:0;anchors_y:219}
-D{i:41;anchors_x:0;anchors_y:219}D{i:42;anchors_x:0;anchors_y:219}
+    D{i:2;anchors_height:720;anchors_width:1280}D{i:32;anchors_x:0;anchors_y:106}D{i:30;anchors_x:0;anchors_y:49}
+D{i:35;anchors_x:0;anchors_y:163}D{i:33;anchors_x:0;anchors_y:106}D{i:38;anchors_x:0;anchors_y:219}
+D{i:36;anchors_x:0;anchors_y:163}D{i:41;anchors_x:0;anchors_y:219}D{i:39;anchors_x:0;anchors_y:219}
+D{i:42;anchors_x:0;anchors_y:219}D{i:29;anchors_x:0;anchors_y:49}
 }
  ##^##*/

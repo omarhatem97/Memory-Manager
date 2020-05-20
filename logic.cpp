@@ -51,7 +51,9 @@ void logic::add_hole(QString startingAddress, QString holeSize)
     Hole hole;
     hole.starting_address = startingAddress.toInt();
     hole.size = holeSize.toInt();
-    holes.append(hole);
+
+    if(hole.starting_address + hole.size <= memorySize)
+            holes.append(hole);
 }
 
 void logic::add_segment(QString name, QString size)
@@ -193,7 +195,16 @@ void logic::set_memoryContents_bestFit()
 
 void logic::set_memoryContents_start()
 {
-    qDebug() << "holes size" << QString::number( holes.size()) << "--- hole 0 is" << holes[0].starting_address;
+    if(holes.size() == 0){
+        MemoryContents m;
+        //insert the process
+        m.start_address = 0;
+        m.end_address = memorySize;
+        m.name = "process1";
+        memory_contents.append(m);
+        return;
+    }
+   //qDebug() << "holes size" << QString::number( holes.size()) << "--- hole 0 is" << holes[0].starting_address;
     int process_conter = 1; // indicate process num p1 , p2 ,p3 ..
     int idx = 0; // start of the loop
    //step 1 : sort holes base address
@@ -457,7 +468,7 @@ void logic::deallocate_process(QString process_name)
                MemoryContents temp;
                temp.name = "HOLE";
                temp.start_address = memory_contents[from].start_address;
-               temp.end_address = memory_contents[to].end_address;
+               temp.end_address = memory_contents[i-1].end_address;
                memory_contentsc.append(temp);
 
                temp.name = memory_contents[i].name;
@@ -466,6 +477,7 @@ void logic::deallocate_process(QString process_name)
                memory_contentsc.append(temp);
 
                appended =1;
+
 
             }
             else {
@@ -480,7 +492,7 @@ void logic::deallocate_process(QString process_name)
         MemoryContents temp;
         temp.name = "HOLE";
         temp.start_address = memory_contents[from].start_address;
-        temp.end_address = memory_contents[to].end_address;
+        temp.end_address = memory_contents[memory_contents.size()-1].end_address;
         memory_contentsc.append(temp);
     }
     memory_contents = memory_contentsc;
