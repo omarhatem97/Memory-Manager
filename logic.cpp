@@ -410,7 +410,7 @@ void logic::get_process_segments(QString name)
 QString logic::get_process_segment(int idx)
 {
     process_segment p = process_segments[idx];
-    return p.name + "  " + QString::number( p.base) + "  " +QString::number(p.limit);
+    return p.name + " -> " + QString::number( p.base) + " | " +QString::number(p.limit);
 }
 
 int logic::get_table_size()
@@ -481,7 +481,12 @@ void logic::deallocate_process(QString process_name)
 
             }
             else {
-                 memory_contentsc.append(m);
+                if(!flag){
+                    //case elle 3ndy feha hole wa7da b3deha process
+                   memory_contentsc.append(memory_contents[i-1]);
+                   appended =1;
+                }
+                memory_contentsc.append(m);
             }
             flag =1;
             from = to = i;
